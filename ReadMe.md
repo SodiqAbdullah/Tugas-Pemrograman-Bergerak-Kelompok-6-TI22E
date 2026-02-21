@@ -1,5 +1,5 @@
 # 📚 PENGUMPULAN TUGAS PRAKTIKUM  
-## KELOMPOK 6 – SOFTWARE 2021  
+## KELOMPOK 6 – Pemrograman Bergerak 2026  
 
 ---
 
@@ -99,3 +99,4 @@ Video di-upload ke:
 Dan link dilampirkan di Google Classroom.
 
 ---
+
