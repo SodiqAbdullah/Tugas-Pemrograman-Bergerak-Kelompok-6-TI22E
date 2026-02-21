@@ -1,0 +1,65 @@
+<ion-content>
+  <!-- HEADER -->
+  <div class="dk-header">
+    <div class="dk-user">
+      <div class="dk-avatar">DK</div>
+      <div>
+        <span class="dk-greeting">Halo, Semuaa</span>
+        <span class="dk-name">Dana Kaget</span>
+      </div>
+    </div>
+    <div class="dk-notif">
+      <img src="assets/ionicons/svg/notifications-outline.svg" />
+    </div>
+  </div>
+
+  <!-- BALANCE CARD -->
+  <div class="dk-card">
+    <div class="dk-card-label">
+      <span>Saldo Tersedia</span>
+      <img src="assets/ionicons/svg/eye-outline.svg" />
+    </div>
+    <div class="dk-amount">Rp {{ saldo | number:'1.0-0' }}</div>
+  </div>
+
+  <!-- SCAN BUTTON -->
+  <div class="dk-scan-wrap">
+    <ion-button expand="block" class="dk-scan-btn" (click)="scanQR()">
+      <img src="assets/ionicons/svg/qr-code-outline.svg" slot="start" />
+      Scan &amp; Bayar QRIS
+    </ion-button>
+  </div>
+
+
+  <!-- TRANSAKSI -->
+  <div class="dk-section">
+    <div class="dk-section-head">
+      <span class="dk-section-title">Transaksi Terbaru</span>
+    </div>
+    <div *ngIf="history.length === 0" class="dk-empty">
+      <div class="dk-empty-box">
+        <img src="assets/ionicons/svg/receipt-outline.svg" />
+      </div>
+      <p class="dk-empty-title">Belum ada transaksi</p>
+      <p class="dk-empty-sub">Scan QR Code untuk mulai bayar</p>
+    </div>
+    <div class="dk-trx-list" *ngIf="history.length > 0">
+      <div class="dk-trx-row" *ngFor="let item of history">
+        <div class="dk-trx-icon">
+          <img src="assets/ionicons/svg/storefront-outline.svg" />
+        </div>
+        <div class="dk-trx-info">
+          <span class="dk-trx-name">{{ item.merchant }}</span>
+          <span class="dk-trx-time">{{ item.waktu }} · QRIS</span>
+        </div>
+        <div class="dk-trx-right">
+          <span class="dk-trx-amount">-Rp {{ item.nominal | number:'1.0-0' }}</span>
+          <span class="dk-trx-status">Berhasil</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dk-space"></div>
+
+</ion-content>
