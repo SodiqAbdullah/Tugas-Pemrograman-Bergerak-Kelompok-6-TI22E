@@ -1,7 +1,0 @@
-{
-  "name": "coba-ai",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular-standalone"
-}
