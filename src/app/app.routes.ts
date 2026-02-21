@@ -2,12 +2,8 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'home',
-    loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
-  },
-  {
     path: '',
-    redirectTo: 'home',
-    pathMatch: 'full',
+    // File routes ini ada di src/app/, jadi path ke home cukup ./home/home.page
+    loadComponent: () => import('./home/home.page').then(m => m.HomePage),
   },
 ];
