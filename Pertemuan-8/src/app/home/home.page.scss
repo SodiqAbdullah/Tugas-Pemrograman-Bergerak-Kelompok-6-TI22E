@@ -1,0 +1,420 @@
+/* ============================================================
+   HOME PAGE SCSS - Semua teks dipaksa hitam agar terbaca
+   ============================================================ */
+
+/* --- GLOBAL: Paksa warna teks hitam di semua komponen Ionic --- */
+ion-content {
+  --color: #111111;
+  color: #111111;
+}
+
+ion-item {
+  --color: #111111;
+  --background: transparent;
+  color: #111111;
+}
+
+ion-label {
+  color: #111111 !important;
+
+  h3 {
+    color: #333333 !important;
+  }
+
+  p {
+    color: #444444 !important;
+  }
+}
+
+ion-card-title {
+  color: #111111 !important;
+}
+
+ion-card-subtitle {
+  color: #555555 !important;
+}
+
+ion-card-content {
+  color: #333333 !important;
+}
+
+ion-input {
+  --color: #111111;
+  --placeholder-color: #999999;
+  color: #111111;
+}
+
+ion-textarea {
+  --color: #111111;
+  --placeholder-color: #999999;
+  color: #111111;
+}
+
+ion-segment-button {
+  --color: rgba(255, 255, 255, 0.7);         /* teks tab tidak aktif — putih transparan */
+  --color-checked: #ffffff;                  /* teks tab aktif — putih penuh */
+  --indicator-color: rgba(255,255,255,0.3);  /* garis bawah indikator tab aktif */
+}
+
+/* Tembus Shadow DOM Ionic agar label benar-benar putih */
+ion-segment-button::part(native) {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+ion-segment-button.segment-button-checked::part(native) {
+  color: #ffffff;
+}
+
+ion-segment-button ion-label {
+  color: inherit !important;
+}
+
+/* --- GENERAL --- */
+.tab-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-info {
+  margin-bottom: 8px;
+}
+
+.info-card {
+  background: linear-gradient(135deg, #e8f4fd, #f0f8ff);
+  border-left: 4px solid var(--ion-color-primary);
+  margin: 8px;
+
+  ion-card-content {
+    font-size: 12px;
+    color: #333333 !important;
+    line-height: 1.6;
+
+    code {
+      background: rgba(0, 0, 0, 0.08);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-family: monospace;
+      color: #0055cc;
+    }
+  }
+}
+
+/* ============================================================
+   TAB 1: CHAT AI
+   ============================================================ */
+.chat-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  padding-bottom: 80px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #888888;
+  text-align: center;
+
+  .empty-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+  }
+
+  p {
+    margin: 4px 0;
+    font-size: 14px;
+    color: #666666;
+  }
+}
+
+.message-wrapper {
+  display: flex;
+  margin-bottom: 12px;
+
+  &.user-wrapper {
+    justify-content: flex-end;
+  }
+
+  &.ai-wrapper {
+    justify-content: flex-start;
+  }
+}
+
+.chat-bubble {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 18px;
+
+  .chat-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .chat-text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .typing-text {
+    font-size: 13px;
+  }
+}
+
+/* Balon chat user — latar gelap, teks PUTIH (sengaja, kontras bagus) */
+.chat-user {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #ffffff !important;
+  border-radius: 18px 18px 4px 18px;
+
+  .chat-label {
+    color: rgba(255, 255, 255, 0.85) !important;
+  }
+
+  .chat-text {
+    color: #ffffff !important;
+  }
+}
+
+/* Balon chat AI — latar terang, teks HITAM */
+.chat-ai {
+  background: #f0f0f0;
+  color: #111111 !important;
+  border-radius: 18px 18px 18px 4px;
+  border: 1px solid #dddddd;
+
+  .chat-label {
+    color: #333333 !important;
+  }
+
+  .chat-text {
+    color: #111111 !important;
+  }
+
+  .typing-text {
+    color: #555555 !important;
+  }
+}
+
+.chat-input-area {
+  position: sticky;
+  bottom: 0;
+  background: #ffffff;
+  border-top: 1px solid #eeeeee;
+  padding: 4px;
+
+  .input-item {
+    --background: #f8f8f8;
+    --color: #111111;
+    --border-radius: 24px;
+    border-radius: 24px;
+
+    .chat-input {
+      --padding-start: 12px;
+      --color: #111111;
+      --placeholder-color: #aaaaaa;
+    }
+  }
+
+  ion-button {
+    margin: 4px;
+  }
+}
+
+/* ============================================================
+   TAB 2: RANDOM USER GENERATOR
+   ============================================================ */
+.center-btn {
+  margin: 8px 0 16px;
+
+  .generate-btn {
+    --border-radius: 12px;
+    height: 50px;
+    font-weight: 600;
+    font-size: 15px;
+  }
+}
+
+.loading-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  color: #666666;
+
+  ion-spinner {
+    margin-bottom: 12px;
+    width: 40px;
+    height: 40px;
+  }
+
+  p {
+    color: #666666;
+  }
+}
+
+.user-card {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+  .user-header {
+    position: relative;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+
+    .user-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 4px solid white;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .user-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+    }
+  }
+
+  .user-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111111 !important;
+  }
+
+  ion-card-subtitle {
+    color: #555555 !important;
+  }
+
+  ion-list {
+    ion-item {
+      --color: #111111;
+      color: #111111;
+    }
+
+    ion-label {
+      h3 {
+        font-weight: 600;
+        color: #333333 !important;
+      }
+
+      p {
+        color: #555555 !important;
+      }
+    }
+  }
+}
+
+/* ============================================================
+   TAB 3: GRAMMAR CHECKER
+   ============================================================ */
+.grammar-input-item {
+  --background: #f8f8f8;
+  --color: #111111;
+  --border-radius: 12px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+
+  .grammar-label {
+    font-weight: 600;
+    color: #111111 !important;
+    margin-bottom: 8px;
+  }
+
+  .grammar-textarea {
+    --padding-start: 4px;
+    --color: #111111;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #111111;
+  }
+}
+
+.grammar-status {
+  min-height: 28px;
+  margin-bottom: 8px;
+
+  .status-checking,
+  .status-waiting {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: #666666;
+    gap: 6px;
+  }
+
+  .inline-spinner {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.grammar-result-card {
+  border-radius: 16px;
+  border-left: 6px solid;
+
+  &.correct {
+    border-left-color: #4caf50;
+    background: linear-gradient(135deg, #f1fff3, #e8fce8);
+
+    ion-card-title {
+      color: #1b5e20 !important;
+    }
+
+    ion-card-content {
+      color: #2e7d32 !important;
+    }
+
+    p {
+      color: #2e7d32 !important;
+    }
+  }
+
+  &.incorrect {
+    border-left-color: #f44336;
+    background: linear-gradient(135deg, #fff3f3, #fce8e8);
+
+    ion-card-title {
+      color: #b71c1c !important;
+    }
+
+    ion-card-content {
+      color: #333333 !important;
+    }
+  }
+
+  .correction-label {
+    margin-bottom: 4px;
+    color: #333333 !important;
+  }
+
+  .correction-text {
+    font-size: 15px;
+    color: #1a237e !important;
+    font-style: italic;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+
+  .explanation-text {
+    font-size: 13px;
+    color: #444444 !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    padding-top: 8px;
+    margin-top: 4px;
+  }
+}

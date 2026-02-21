@@ -1,0 +1,214 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>AI Mobile App</ion-title>
+  </ion-toolbar>
+  <!-- Tab Navigation -->
+  <ion-toolbar color="primary">
+    <ion-segment [(ngModel)]="activeTab" (ionChange)="onTabChange()">
+      <ion-segment-button value="chat">
+        <ion-label>💬 Chat AI</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="user">
+        <ion-label>👤 Random User</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="grammar">
+        <ion-label>✍️ Grammar</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+    <!-- TAB 1: CHAT AI (Gemini) - Menggunakan Observable -->
+
+  <div *ngIf="activeTab === 'chat'" class="tab-content">
+    <div class="chat-container" #chatContainer>
+      <!-- Pesan sambutan jika belum ada chat -->
+      <div *ngIf="chatHistory.length === 0" class="empty-state">
+        <div class="empty-icon">🤖</div>
+        <p>Halo! Saya Bot AI berbasis Google Gemini.</p>
+        <p>Tanyakan apa saja!</p>
+      </div>
+
+      <!-- Daftar pesan chat -->
+      <div *ngFor="let msg of chatHistory" class="message-wrapper"
+           [class.user-wrapper]="msg.role === 'user'"
+           [class.ai-wrapper]="msg.role === 'model'">
+        <div [class]="msg.role === 'user' ? 'chat-bubble chat-user' : 'chat-bubble chat-ai'">
+          <span class="chat-label">{{ msg.role === 'user' ? '🧑 Saya' : '🤖 Bot AI' }}</span>
+          <p class="chat-text">{{ msg.text }}</p>
+        </div>
+      </div>
+
+      <!-- Indikator loading AI sedang menjawab -->
+      <div *ngIf="chatLoading" class="message-wrapper ai-wrapper">
+        <div class="chat-bubble chat-ai">
+          <span class="chat-label">🤖 Bot AI</span>
+          <ion-spinner name="dots"></ion-spinner>
+          <span class="typing-text"> sedang mengetik...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input area -->
+    <div class="chat-input-area">
+      <ion-item lines="none" class="input-item">
+        <ion-input
+          placeholder="Tulis pertanyaan..."
+          [(ngModel)]="chatInput"
+          (keydown.enter)="kirimPesanChat()"
+          class="chat-input">
+        </ion-input>
+        <ion-button
+          slot="end"
+          (click)="kirimPesanChat()"
+          [disabled]="chatLoading || !chatInput.trim()"
+          color="primary">
+          <ion-icon name="send"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </div>
+  </div>
+
+    <!-- TAB 2: RANDOM USER GENERATOR - Menggunakan Promise (async/await) -->
+  <div *ngIf="activeTab === 'user'" class="tab-content ion-padding">
+    <div class="section-info">
+      <ion-card class="info-card">
+        <ion-card-content>
+          <strong>📌 Konsep:</strong> Menggunakan <code>async/await</code> (Promise).
+          Karena ini aksi "Sekali Tembak" — klik tombol → tunggu → tampil data.
+          HttpClient Observable dikonversi ke Promise menggunakan <code>lastValueFrom()</code>.
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Tombol Generate -->
+    <div class="center-btn">
+      <ion-button expand="block" (click)="generateUser()" [disabled]="userLoading" color="secondary" class="generate-btn">
+        <ion-icon name="person-add" slot="start"></ion-icon>
+        {{ userLoading ? 'Memuat...' : 'Generate User Baru' }}
+      </ion-button>
+    </div>
+
+    <!-- Loading spinner -->
+    <div *ngIf="userLoading" class="loading-center">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Mengambil data user acak...</p>
+    </div>
+
+    <!-- Kartu Profil User -->
+    <ion-card *ngIf="randomUser && !userLoading" class="user-card">
+      <div class="user-header">
+        <img [src]="randomUser.picture.large" class="user-avatar" alt="Foto User"/>
+        <div class="user-badge">
+          <ion-badge color="success">Akun Aktif</ion-badge>
+        </div>
+      </div>
+      <ion-card-header>
+        <ion-card-title class="user-name">
+          {{ randomUser.name.title }}. {{ randomUser.name.first }} {{ randomUser.name.last }}
+        </ion-card-title>
+        <ion-card-subtitle>{{ randomUser.login.username }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list lines="none">
+          <ion-item>
+            <ion-icon name="mail" slot="start" color="primary"></ion-icon>
+            <ion-label>
+              <h3>Email</h3>
+              <p>{{ randomUser.email }}</p>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon name="call" slot="start" color="success"></ion-icon>
+            <ion-label>
+              <h3>Telepon</h3>
+              <p>{{ randomUser.phone }}</p>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon name="location" slot="start" color="danger"></ion-icon>
+            <ion-label>
+              <h3>Lokasi</h3>
+              <p>{{ randomUser.location.city }}, {{ randomUser.location.country }}</p>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon name="person" slot="start" color="warning"></ion-icon>
+            <ion-label>
+              <h3>Gender</h3>
+              <p>{{ randomUser.gender | titlecase }}</p>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon name="calendar" slot="start" color="secondary"></ion-icon>
+            <ion-label>
+              <h3>Tanggal Lahir</h3>
+              <p>{{ randomUser.dob.date | date:'dd MMMM yyyy' }} ({{ randomUser.dob.age }} tahun)</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+    <!-- TAB 3: LIVE GRAMMAR CHECKER - Observable + RxJS -->
+  <div *ngIf="activeTab === 'grammar'" class="tab-content ion-padding">
+    <div class="section-info">
+      <ion-card class="info-card">
+        <ion-card-content>
+          <strong>📌 Konsep:</strong> Menggunakan <code>Observable</code> + RxJS operator:
+          <br>• <code>debounceTime(1000)</code> — Tunggu 1 detik setelah berhenti mengetik
+          <br>• <code>switchMap</code> — Batalkan request lama jika ada input baru
+          <br>• <strong>Tidak ada tombol</strong> — pengecekan otomatis!
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <ion-item lines="none" class="grammar-input-item">
+      <ion-label position="stacked" class="grammar-label">Ketik kalimat bahasa Inggris di sini:</ion-label>
+      <ion-textarea
+        [formControl]="grammarControl"
+        placeholder="e.g. She go to school yesterday..."
+        rows="4"
+        class="grammar-textarea">
+      </ion-textarea>
+    </ion-item>
+
+    <!-- Status indicator -->
+    <div class="grammar-status">
+      <span *ngIf="grammarChecking" class="status-checking">
+        <ion-spinner name="dots" class="inline-spinner"></ion-spinner> Menganalisis grammar...
+      </span>
+      <span *ngIf="!grammarChecking && grammarControl.value && !grammarResult" class="status-waiting">
+        ⏳ Menunggu Anda berhenti mengetik...
+      </span>
+    </div>
+
+    <!-- Hasil Grammar Check -->
+    <ion-card *ngIf="grammarResult && !grammarChecking" class="grammar-result-card"
+              [class.correct]="grammarResult.status === 'Correct'"
+              [class.incorrect]="grammarResult.status === 'Incorrect'">
+      <ion-card-header>
+        <ion-card-title>
+          <span *ngIf="grammarResult.status === 'Correct'">✅ Grammar Benar!</span>
+          <span *ngIf="grammarResult.status === 'Incorrect'">❌ Grammar Salah</span>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngIf="grammarResult.status === 'Incorrect'">
+          <p class="correction-label"><strong>Koreksi:</strong></p>
+          <p class="correction-text">{{ grammarResult.correction }}</p>
+        </div>
+        <div *ngIf="grammarResult.status === 'Correct'">
+          <p>Kalimat Anda sudah benar secara grammar! 🎉</p>
+        </div>
+        <p *ngIf="grammarResult.explanation" class="explanation-text">
+          <strong>Penjelasan:</strong> {{ grammarResult.explanation }}
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+</ion-content>
