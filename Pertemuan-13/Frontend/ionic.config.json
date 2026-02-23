@@ -1,0 +1,7 @@
+{
+  "name": "geo-patrol-baru",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

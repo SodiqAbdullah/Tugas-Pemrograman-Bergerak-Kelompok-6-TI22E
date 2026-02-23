@@ -1,0 +1,79 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Daftar Akun Baru</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <div class="ion-text-center ion-margin-bottom" style="margin-top: 30px;">
+    <ion-icon name="person-add-outline" style="font-size: 64px; color: var(--ion-color-primary);"></ion-icon>
+    <h2>Buat Akun Anda</h2>
+    <p style="color: gray;">Data password akan dienkripsi dengan <strong>Bcrypt</strong></p>
+  </div>
+
+  <!-- FORM REGISTER -->
+  <ion-item lines="full" style="margin-bottom: 10px;">
+    <ion-icon name="person-outline" slot="start" color="primary"></ion-icon>
+    <ion-input
+      label="Username"
+      labelPlacement="floating"
+      [(ngModel)]="username"
+      placeholder="Buat username unik"
+      autocomplete="username">
+    </ion-input>
+  </ion-item>
+
+  <ion-item lines="full" style="margin-bottom: 10px;">
+    <ion-icon name="lock-closed-outline" slot="start" color="primary"></ion-icon>
+    <ion-input
+      label="Password"
+      type="password"
+      labelPlacement="floating"
+      [(ngModel)]="password"
+      placeholder="Minimal 6 karakter">
+    </ion-input>
+  </ion-item>
+
+  <ion-item lines="full" style="margin-bottom: 20px;">
+    <ion-icon name="lock-open-outline" slot="start" color="secondary"></ion-icon>
+    <ion-input
+      label="Konfirmasi Password"
+      type="password"
+      labelPlacement="floating"
+      [(ngModel)]="confirmPassword"
+      placeholder="Ulangi password">
+    </ion-input>
+  </ion-item>
+
+  <!-- TOMBOL DAFTAR -->
+  <ion-button
+    expand="block"
+    class="ion-margin-top"
+    (click)="register()"
+    [disabled]="isLoading">
+    <ion-spinner *ngIf="isLoading" name="crescent" style="margin-right: 8px;"></ion-spinner>
+    <span *ngIf="!isLoading">DAFTAR SEKARANG</span>
+    <span *ngIf="isLoading">Mendaftarkan...</span>
+  </ion-button>
+
+  <!-- LINK KE LOGIN -->
+  <ion-button
+    expand="block"
+    fill="clear"
+    color="medium"
+    routerLink="/login"
+    style="margin-top: 10px;">
+    Sudah punya akun? <strong>&nbsp;Login di sini</strong>
+  </ion-button>
+
+  <!-- INFO ENKRIPSI -->
+  <div style="margin-top: 30px; padding: 15px; background: #f0fff4; border-radius: 10px; text-align: center;">
+    <ion-icon name="shield-checkmark-outline" color="success"></ion-icon>
+    <p style="font-size: 0.8rem; color: #555; margin: 5px 0 0 0;">
+      Password Anda <strong>tidak pernah</strong> disimpan dalam bentuk aslinya.<br>
+      Sistem menggunakan hash <strong>Bcrypt (10 rounds)</strong>.
+    </p>
+  </div>
+
+</ion-content>

@@ -1,0 +1,138 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      <ion-icon src="https://unpkg.com/ionicons@5.5.2/dist/svg/map-outline.svg" style="margin-right: 5px;"></ion-icon>
+      GeoPatrol AI
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="lihatRiwayat()" title="Riwayat Patroli">
+        <ion-icon src="https://unpkg.com/ionicons@5.5.2/dist/svg/time-outline.svg"></ion-icon>
+      </ion-button>
+      <ion-button (click)="logout()" title="Logout">
+        <ion-icon src="https://unpkg.com/ionicons@5.5.2/dist/svg/log-out-outline.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <!-- PETA LEAFLET -->
+  <div id="map" style="width: 100%; height: 40vh; border-bottom: 3px solid var(--ion-color-primary);"></div>
+
+  <!-- INFO PETUGAS -->
+  <ion-item lines="full" color="light">
+    <ion-icon src="https://unpkg.com/ionicons@5.5.2/dist/svg/person-circle-outline.svg" slot="start" color="primary"></ion-icon>
+    <ion-label>
+      <p style="font-size:0.75rem; color:gray;">Login sebagai</p>
+      <strong>{{ usernameLogin }}</strong>
+    </ion-label>
+  </ion-item>
+
+  <!-- CARD STATUS -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon src="https://unpkg.com/ionicons@5.5.2/dist/svg/information-circle-outline.svg"></ion-icon>
+        Status Patroli
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+
+      <!-- KOORDINAT -->
+      <ion-item lines="full">
+        <ion-icon src="https://unpkg.com/ionicons@5.5.2/dist/svg/location-outline.svg" slot="start" color="primary"></ion-icon>
+        <ion-label>
+          <h2>Koordinat Saat Ini</h2>
+          <p>Lat: <strong>{{ latitude.toFixed(6) }}</strong></p>
+          <p>Lng: <strong>{{ longitude.toFixed(6) }}</strong></p>
+        </ion-label>
+      </ion-item>
+
+      <!-- JARAK -->
+      <ion-item lines="full" *ngIf="jarak !== undefined">
+        <ion-icon src="https://unpkg.com/ionicons@5.5.2/dist/svg/resize-outline.svg" slot="start" [color]="jarak > 100 ? 'danger' : 'success'"></ion-icon>
+        <ion-label>
+          <h2>Jarak dari Target</h2>
+          <p [style.color]="jarak > 100 ? 'red' : 'green'">
+            <strong>{{ jarak.toFixed(2) }} meter</strong>
+          </p>
+          <p *ngIf="jarak > 100" style="color:red; font-weight:bold;">⚠️ DI LUAR JANGKAUAN!</p>
+          <p *ngIf="jarak <= 100" style="color:green; font-weight:bold;">✅ Dalam jangkauan</p>
+        </ion-label>
+      </ion-item>
+
+      <!-- FOTO BUKTI -->
+      <ion-item lines="none" *ngIf="capturedImage">
+        <ion-icon src="https://unpkg.com/ionicons@5.5.2/dist/svg/camera-outline.svg" slot="start" color="tertiary"></ion-icon>
+        <ion-label><h2>Foto Bukti</h2></ion-label>
+      </ion-item>
+      <img *ngIf="capturedImage" [src]="capturedImage"
+           style="width:100%; border-radius:10px; margin:8px 0; border:2px solid var(--ion-color-primary);" />
+
+    </ion-card-content>
+  </ion-card>
+
+  <!-- CARD FORM LAPORAN (muncul setelah foto diambil) -->
+  <ion-card *ngIf="sudahFoto">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon src="https://unpkg.com/ionicons@5.5.2/dist/svg/create-outline.svg"></ion-icon>
+        Form Laporan
+      </ion-card-title>
+      <ion-card-subtitle>Lengkapi data sebelum disimpan</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <!-- NAMA LOKASI (wajib) -->
+      <ion-item lines="full">
+        <ion-icon src="https://unpkg.com/ionicons@5.5.2/dist/svg/business-outline.svg" slot="start" color="primary"></ion-icon>
+        <ion-label position="floating">Nama Lokasi *</ion-label>
+        <ion-input
+          [(ngModel)]="namaLokasi"
+          placeholder="Contoh: Pos Keamanan Blok A"
+          clearInput="true">
+        </ion-input>
+      </ion-item>
+
+      <!-- NO RESI / KODE (opsional) -->
+      <ion-item lines="none" style="margin-top:8px;">
+        <ion-icon src="https://unpkg.com/ionicons@5.5.2/dist/svg/barcode-outline.svg" slot="start" color="secondary"></ion-icon>
+        <ion-label position="floating">No. Resi / Kode Lokasi (opsional)</ion-label>
+        <ion-input
+          [(ngModel)]="noResi"
+          placeholder="Contoh: JKT-2024-001"
+          clearInput="true">
+        </ion-input>
+      </ion-item>
+
+      <!-- TOMBOL SIMPAN -->
+      <ion-button expand="block" color="success" (click)="simpanLaporan()" style="margin-top:15px;">
+        <ion-icon src="https://unpkg.com/ionicons@5.5.2/dist/svg/cloud-upload-outline.svg" slot="start"></ion-icon>
+        Simpan ke Database
+      </ion-button>
+
+    </ion-card-content>
+  </ion-card>
+
+  <!-- FAB BUTTONS -->
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+    <ion-fab-button color="tertiary" (click)="refreshLokasi()" title="Refresh Lokasi">
+      <ion-icon src="https://unpkg.com/ionicons@5.5.2/dist/svg/refresh.svg"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="success" (click)="mulaiPatroli()" title="Ambil Foto Bukti">
+      <ion-icon src="https://unpkg.com/ionicons@5.5.2/dist/svg/camera.svg"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button color="light" size="small" (click)="ubahKeSatellite()" title="Toggle Satellite">
+      <ion-icon src="https://unpkg.com/ionicons@5.5.2/dist/svg/globe-outline.svg"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

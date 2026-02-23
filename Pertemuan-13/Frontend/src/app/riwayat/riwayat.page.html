@@ -1,0 +1,100 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-icon name="time-outline" style="margin-right:5px;"></ion-icon>
+      Riwayat Patroli
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="loadRiwayat()" title="Refresh">
+        <ion-icon name="refresh"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- LOADING -->
+  <div *ngIf="isLoading" style="text-align:center; padding:50px 20px;">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <p style="color:gray; margin-top:10px;">Memuat data dari server...</p>
+  </div>
+
+  <!-- KOSONG -->
+  <div *ngIf="!isLoading && riwayat.length === 0"
+       style="text-align:center; padding:60px 20px;">
+    <ion-icon name="document-outline" style="font-size:64px; color:#ccc;"></ion-icon>
+    <h3 style="color:#999;">Belum ada laporan</h3>
+    <p style="color:#bbb;">Lakukan patroli pertama Anda!</p>
+    <ion-button fill="outline" (click)="kembali()">Mulai Patroli</ion-button>
+  </div>
+
+  <!-- LIST RIWAYAT -->
+  <ion-list *ngIf="!isLoading && riwayat.length > 0" lines="none" style="padding:10px;">
+
+    <ion-card *ngFor="let item of riwayat" class="riwayat-card">
+      <ion-card-content>
+
+        <!-- HEADER CARD -->
+        <div class="card-header">
+          <div>
+            <h2 class="nama-lokasi">{{ item.nama_lokasi }}</h2>
+            <p class="waktu">{{ formatTanggal(item.created_at || '') }}</p>
+          </div>
+          <ion-badge [color]="item.status === 'Dalam Jangkauan' ? 'success' : 'danger'">
+            {{ item.status === 'Dalam Jangkauan' ? '✅' : '⚠️' }}
+            {{ item.status }}
+          </ion-badge>
+        </div>
+
+        <!-- DETAIL -->
+        <ion-item lines="none" class="detail-item">
+          <ion-icon name="person-outline" slot="start" color="medium" size="small"></ion-icon>
+          <ion-label><p>{{ item.username }}</p></ion-label>
+        </ion-item>
+
+        <ion-item lines="none" class="detail-item">
+          <ion-icon name="location-outline" slot="start" color="primary" size="small"></ion-icon>
+          <ion-label>
+            <p>{{ item.latitude?.toFixed(6) }}, {{ item.longitude?.toFixed(6) }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none" class="detail-item"
+                  *ngIf="item.no_resi && item.no_resi !== '-'">
+          <ion-icon name="barcode-outline" slot="start" color="secondary" size="small"></ion-icon>
+          <ion-label><p>{{ item.no_resi }}</p></ion-label>
+        </ion-item>
+
+        <ion-item lines="none" class="detail-item">
+          <ion-icon name="resize-outline" slot="start"
+                    [color]="item.jarak > 100 ? 'danger' : 'success'" size="small"></ion-icon>
+          <ion-label><p>Jarak: {{ item.jarak?.toFixed(1) }} meter</p></ion-label>
+        </ion-item>
+
+        <!-- FOTO -->
+        <div *ngIf="item.foto" style="margin-top:8px;">
+          <img [src]="item.foto"
+               (click)="lihatFoto(item.foto!)"
+               class="foto-thumbnail"
+               alt="Foto bukti patroli" />
+          <p style="text-align:center; font-size:0.75rem; color:#999; margin:4px 0 0 0;">
+            Ketuk foto untuk memperbesar
+          </p>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+
+  </ion-list>
+
+  <!-- MODAL FOTO FULLSCREEN -->
+  <div *ngIf="fotoTerpilih" class="foto-modal" (click)="tutupFoto()">
+    <img [src]="fotoTerpilih" class="foto-fullscreen" />
+    <p class="foto-hint">Ketuk untuk menutup</p>
+  </div>
+
+</ion-content>
