@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Tambah Mahasiswa</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <form [formGroup]="formMahasiswa" (ngSubmit)="simpanData()">
+
+    <ion-item>
+      <ion-input label="Nama Lengkap" labelPlacement="floating"
+                 formControlName="nama" placeholder="Masukkan nama">
+      </ion-input>
+    </ion-item>
+    <div *ngIf="formMahasiswa.get('nama')?.invalid && formMahasiswa.get('nama')?.touched">
+      <ion-text color="danger" style="font-size: small; padding-left: 16px;">
+        <span *ngIf="formMahasiswa.get('nama')?.errors?.['required']">Nama wajib diisi.</span>
+        <span *ngIf="formMahasiswa.get('nama')?.errors?.['minlength']">Minimal 5 karakter.</span>
+      </ion-text>
+    </div>
+
+    <ion-item>
+      <ion-input label="NIM" labelPlacement="floating"
+                 formControlName="nim" placeholder="Contoh: 2023001" maxlength="8">
+      </ion-input>
+    </ion-item>
+    <div *ngIf="formMahasiswa.get('nim')?.invalid && formMahasiswa.get('nim')?.touched">
+      <ion-text color="danger" style="font-size: small; padding-left: 16px;">
+        <span *ngIf="formMahasiswa.get('nim')?.errors?.['required']">NIM wajib diisi.</span>
+        <span *ngIf="formMahasiswa.get('nim')?.errors?.['pattern']">NIM harus berupa angka.</span>
+      </ion-text>
+    </div>
+
+    <ion-item>
+      <ion-select label="Jurusan" labelPlacement="floating" formControlName="jurusan" placeholder="Pilih Jurusan">
+        <ion-select-option value="TI">Teknik Informatika</ion-select-option>
+        <ion-select-option value="SI">Sistem Informasi</ion-select-option>
+        <ion-select-option value="DKV">Desain Komunikasi Visual</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <div *ngIf="formMahasiswa.get('jurusan')?.invalid && formMahasiswa.get('jurusan')?.touched">
+      <ion-text color="danger" style="font-size: small; padding-left: 16px;">
+        Jurusan wajib dipilih.
+      </ion-text>
+    </div>
+
+    <div class="ion-margin-top">
+      <ion-button expand="block" type="submit" [disabled]="!formMahasiswa.valid">
+        {{ isEditMode ? 'Update Data' : 'Simpan Data' }}
+      </ion-button>
+    </div>
+
+  </form>
+</ion-content>

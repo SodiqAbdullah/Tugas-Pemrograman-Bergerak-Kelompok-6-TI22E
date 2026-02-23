@@ -1,0 +1,40 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      Data Mahasiswa
+    </ion-title>
+
+    <!-- Tombol biasa di Header -->
+    <ion-buttons slot="end">
+      <ion-button routerLink="/tambah-mhs">Tambah Mahasiswa</ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let mhs of dataMahasiswa" detail="true">
+      <ion-label (click)="router.navigate(['/detail', mhs.id])">
+        <h2>{{ mhs.nama }}</h2>
+        <p>NIM: {{ mhs.nim }}</p>
+        <p>Prodi: {{ mhs.jurusan }}</p>
+      </ion-label>
+      <ion-buttons slot="end">
+        <ion-button fill="clear" color="primary" (click)="editData(mhs)">
+          <ion-icon name="pencil"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" color="danger" (click)="hapusData(mhs)">
+          <ion-icon name="trash"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+
+  <!-- menambahkan button tambah melayang -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button routerLink="/tambah-mhs">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

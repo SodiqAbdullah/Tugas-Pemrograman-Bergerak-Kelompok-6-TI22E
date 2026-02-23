@@ -1,0 +1,7 @@
+{
+  "name": "pertemuan-6",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
