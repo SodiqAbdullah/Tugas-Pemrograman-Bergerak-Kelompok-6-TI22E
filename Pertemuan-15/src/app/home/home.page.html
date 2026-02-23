@@ -1,0 +1,93 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="danger">
+    <ion-title>
+      Ojek Siber (Security Demo)
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  
+  <!-- 1. Test Login SQL Injection -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>1. Test Login SQL Injection</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-input 
+        label="Username" 
+        labelPlacement="floating" 
+        fill="outline" 
+        [(ngModel)]="username"
+        placeholder="Masukkan username">
+      </ion-input>
+      <br>
+      <ion-input 
+        label="Password" 
+        type="password" 
+        labelPlacement="floating" 
+        fill="outline" 
+        [(ngModel)]="password"
+        placeholder="Masukkan password">
+      </ion-input>
+      <br>
+      <ion-button expand="block" color="warning" (click)="loginVulnerable()">
+        Login (Tidak Aman - Vulnerable)
+      </ion-button>
+      <p style="font-size: 11px; color: grey; margin-top: 8px;">
+        <strong>Coba username:</strong> admin' -- (tanpa password)
+      </p>
+      <ion-button expand="block" color="success" (click)="loginSecure()" style="margin-top: 10px;">
+        Login (Aman - Secure)
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- 2. Test Lokasi Fake GPS -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>2. Test Deteksi Fake GPS</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Aktifkan Fake GPS (Simulasi Tuyul)</ion-label>
+        <ion-toggle [(ngModel)]="isFakeGPS" color="danger"></ion-toggle>
+      </ion-item>
+      <ion-button expand="block" color="primary" (click)="kirimLokasi()" style="margin-top: 10px;">
+        Kirim Lokasi ke Server
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- 3. Test Topup Saldo (Server-Side Validation) -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>3. Test Topup Saldo</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p style="font-size: 12px; color: grey;">
+        Demo Server-Side Validation: Jangan pernah percaya data dari client!
+      </p>
+      <ion-input 
+        label="Nominal Topup" 
+        type="number"
+        labelPlacement="floating" 
+        fill="outline" 
+        [(ngModel)]="topupAmount"
+        placeholder="Masukkan nominal">
+      </ion-input>
+      <br>
+      <ion-button expand="block" color="tertiary" (click)="topup()" style="margin-top: 10px;">
+        Request Topup
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Result Display -->
+  <ion-card *ngIf="resultMessage" color="medium">
+    <ion-card-content>
+      <strong>Hasil:</strong> {{ resultMessage }}
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
